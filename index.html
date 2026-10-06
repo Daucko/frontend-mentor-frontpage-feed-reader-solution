@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Frontpage — your personalized front page for tech content</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Cpath d='M9 9h14v3H9zM9 15h14v2H9zM9 20h9v2H9z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#list">Skip to items</a>
+
+    <section id="landing">
+      <header class="l-head"><span class="logo">Frontpage</span></header>
+      <main class="hero">
+        <h1>Every blog you follow, on one calm page.</h1>
+        <p>
+          Add the dev, design and AI sources you read. Frontpage keeps them
+          sorted by category, tracks what you've read, and gets out of the way.
+        </p>
+        <div class="cta">
+          <button class="btn primary" id="open">Open dashboard</button>
+        </div>
+        <ul class="features">
+          <li>
+            <h2>Categories with counts</h2>
+            <p>
+              Frontend, Design, DevOps and AI, each with its own unread total.
+            </p>
+          </li>
+          <li>
+            <h2>Three layouts</h2>
+            <p>Switch between a standard list, a compact list and cards.</p>
+          </li>
+          <li>
+            <h2>Keyboard first</h2>
+            <p>Move with j and k, open with o, save with s, search with /.</p>
+          </li>
+          <li>
+            <h2>Reader view</h2>
+            <p>
+              Read in Georgia at a comfortable width, without leaving the page.
+            </p>
+          </li>
+        </ul>
+      </main>
+    </section>
+
+    <div id="app" hidden>
+      <header id="top">
+        <div class="logo">
+          <span class="mark" aria-hidden="true"></span
+          ><span class="wm">Frontpage</span>
+        </div>
+        <nav class="tabs" aria-label="Main">
+          <button data-view="all">Feed</button
+          ><button data-view="digest">Digest</button
+          ><button data-view="discover">Discover</button
+          ><button data-view="manage">Manage</button>
+        </nav>
+        <div class="top-r">
+          <div class="search">
+            <input
+              id="q"
+              type="search"
+              placeholder="Search articles..."
+              aria-label="Search items"
+            /><kbd aria-hidden="true">/</kbd>
+          </div>
+          <button class="sq" id="add" aria-label="Add a feed">+</button>
+          <button class="btn small" id="theme"></button>
+        </div>
+      </header>
+
+      <aside id="nav" aria-label="Sources">
+        <nav>
+          <ul id="nav-top"></ul>
+          <h2 class="nav-h">CATEGORIES</h2>
+          <ul id="nav-cats"></ul>
+        </nav>
+        <button class="health" id="health"></button>
+        <span id="status" class="stat"></span>
+      </aside>
+
+      <main id="feed">
+        <div class="bar">
+          <button class="icon menu" id="menu" aria-label="Toggle sources">
+            ☰
+          </button>
+          <div class="ttl">
+            <h1 id="title">All items</h1>
+            <span id="unread" class="muted"></span>
+          </div>
+          <div class="seg" role="group" aria-label="Layout">
+            <button
+              data-layout="list"
+              aria-pressed="true"
+              aria-label="List"
+              title="List"
+            >
+              ☰
+            </button>
+            <button
+              data-layout="cards"
+              aria-pressed="false"
+              aria-label="Cards"
+              title="Cards"
+            >
+              ▦
+            </button>
+            <button
+              data-layout="compact"
+              aria-pressed="false"
+              aria-label="Compact"
+              title="Compact"
+            >
+              ≡
+            </button>
+          </div>
+          <button class="btn small" id="sort">Newest</button>
+          <button class="btn small" id="refresh">Refresh</button>
+          <button class="btn small" id="markall">Mark all read</button>
+        </div>
+        <button id="banner" class="banner" hidden></button>
+        <ul id="list" class="list" tabindex="-1"></ul>
+        <div id="manage" hidden></div>
+      </main>
+
+      <article id="reader" aria-label="Reader" hidden></article>
+    </div>
+
+    <div id="live" class="sr" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
