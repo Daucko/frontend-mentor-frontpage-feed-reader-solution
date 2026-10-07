@@ -12,10 +12,12 @@
           "'": '&#39;',
         })[c],
     );
+
   const PROXY = 'https://api.allorigins.win/raw?url='; // swap for your own server-side fetcher in production
   const KEY = 'frontpage.v2',
     UNC = 'Uncategorized',
     DAY = 864e5;
+
   const SEED = {
     Frontend: [
       ['CSS-Tricks', 'https://css-tricks.com/feed/'],
@@ -47,6 +49,7 @@
       ['Hugging Face Blog', 'https://huggingface.co/blog/feed.xml'],
     ],
   };
+
   const TOPICS = {
     Frontend: [
       'Container queries in practice',
@@ -79,12 +82,14 @@
       'Notes on tool use and long context',
     ],
   };
+
   const CATALOG = JSON.parse(JSON.stringify(SEED));
   CATALOG.Frontend.push(['Overreacted', 'https://overreacted.io/rss.xml']);
   CATALOG['General Tech'].push(
     ['Julia Evans', 'https://jvns.ca/atom.xml'],
     ['Daring Fireball', 'https://daringfireball.net/feeds/main'],
   );
+
   const BODY = [
     'Sample content shown until this feed loads. Real items replace it after the first successful refresh.',
     'Reader view uses a serif face at a narrow measure. Inline <code>code</code> uses the monospace stack from the brand kit.',
@@ -107,6 +112,7 @@
     '#14b8a6',
     '#ef4444',
   ];
+
   let CC = new Map();
   const day = (d) => {
     const a = new Date(d),
@@ -126,6 +132,7 @@
             day: 'numeric',
           });
   };
+
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const uid = () => Math.random().toString(36).slice(2, 9);
   const norm = (u) => u.trim().replace(/\/+$/, '').toLowerCase();
@@ -179,10 +186,13 @@
       lastAll: 0,
     };
   }
+
   let S;
+
   try {
     S = JSON.parse(localStorage.getItem(KEY));
   } catch {}
+
   S = S || seed();
   const prevVisit = S.last;
   S.last = Date.now();
@@ -200,6 +210,7 @@
     busy: false,
     exp: new Set(S.cats.slice(0, 2)),
   };
+
   const live = $('#live'),
     say = (m) => {
       live.textContent = m;
@@ -247,6 +258,7 @@
     t.innerHTML = s;
     return t.value;
   };
+
   const tx = (n, ...names) => {
     for (const nm of names) {
       const e = [...n.children].find((c) => c.localName === nm);
@@ -336,6 +348,7 @@
       clearTimeout(t);
     }
   }
+
   async function refreshAll(manual) {
     if (st.busy) return;
     st.busy = true;
@@ -379,6 +392,7 @@
     groups.forEach((g) => (g.show = g.all.slice(0, 3)));
     return { groups, flat: groups.flatMap((g) => g.show), since };
   }
+
   function visible() {
     if (st.view === 'digest') return digestSet().flat;
     const m = fmap(),
@@ -405,6 +419,7 @@
     const m = fmap();
     return S.items.filter((i) => !i.read && f(i, m)).length;
   };
+
   function renderNav() {
     const cs = cats();
     CC = new Map(cs.map((c, i) => [c, CAT[i % CAT.length]]));
@@ -443,6 +458,7 @@
       .querySelectorAll('#top .tabs button')
       .forEach((b) => b.toggleAttribute('aria-current', b.dataset.view === tv));
   }
+
   function itemHTML(i, n, m) {
     const f = m.get(i.fid) || { title: '', cat: '' };
     return `<li class="item ${i.read ? 'read' : ''}" data-id="${i.id}" role="button" tabindex="0" aria-selected="${n === st.sel}"><span class="dot" aria-hidden="true"></span><div>
@@ -450,6 +466,7 @@
   <div class="meta"><span class="fav" style="background:${color(i.fid)}" aria-hidden="true">${esc(f.title[0] || '?')}</span><span>${esc(f.title)}</span><time title="${new Date(i.date).toLocaleString()}">${ago(i.date)}</time>${i.saved ? '<span class="saved">Saved</span>' : ''}</div>
   <p class="sum">${esc(i.sum)}</p>${f.cat ? `<span class="chip" style="--c:${CC.get(f.cat) || '#64748b'}">${esc(f.cat)}</span>` : ''}</div></li>`;
   }
+
   function render() {
     renderNav();
     const mg = st.view === 'manage' || st.view === 'discover';
@@ -545,6 +562,7 @@
     render();
     say('Opened ' + it.title);
   }
+
   const cur = () => visible()[st.sel];
   function step(d) {
     const l = visible();
@@ -558,6 +576,7 @@
     }
     if (st.open) openItem(l[st.sel]);
   }
+
   function toggle(it, k) {
     if (!it) return;
     it[k] = !it[k];
@@ -638,6 +657,7 @@
     $('#addmsg').textContent = `Added ${f.title} with ${n} items.`;
     say('Feed added');
   }
+
   async function importOpml(file) {
     const doc = new DOMParser().parseFromString(await file.text(), 'text/xml'),
       out = $('#impmsg');
@@ -688,6 +708,7 @@
       `${add} feeds added, ${dup} duplicates skipped, ${bad} invalid. Refreshing to check for dead feeds.`;
     refreshAll(true);
   }
+
   function exportOpml() {
     const x = `<?xml version="1.0" encoding="UTF-8"?><opml version="2.0"><head><title>Frontpage</title></head><body>${cats()
       .map(
@@ -706,6 +727,7 @@
     a.download = 'frontpage.opml';
     a.click();
   }
+
   const mg = $('#manage');
   mg.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -720,6 +742,7 @@
       }
     }
   });
+
   mg.addEventListener('change', (e) => {
     const t = e.target;
     if (t.id === 'opml' && t.files[0]) importOpml(t.files[0]);
@@ -733,6 +756,7 @@
       render();
     }
   });
+
   mg.addEventListener('click', async (e) => {
     const b = e.target.closest('button');
     if (!b) return;
@@ -867,10 +891,12 @@
     $$('[data-layout]').forEach((b) =>
       b.setAttribute('aria-pressed', b.dataset.layout === S.prefs.layout),
     );
+
     render();
     $('#list').focus();
     if (Date.now() - S.lastAll > 5 * 60000) refreshAll(false);
   };
+
   $('#nav').addEventListener('click', (e) => {
     const b = e.target.closest('[data-view]');
     if (!b) return;
@@ -882,10 +908,12 @@
     }
     go(v);
   });
+
   $('#top').addEventListener('click', (e) => {
     const b = e.target.closest('[data-view]');
     if (b) go(b.dataset.view);
   });
+
   $('#health').onclick = () => go('manage');
   $('#add').onclick = () => {
     go('manage');
@@ -894,15 +922,18 @@
       if (i) i.focus();
     }, 0);
   };
+
   $('#sort').onclick = () => {
     S.prefs.sort = S.prefs.sort === 'old' ? 'new' : 'old';
     save();
     render();
   };
+
   $('#banner').onclick = () => {
     $('#banner').hidden = true;
     window.scrollTo({ top: 0 });
   };
+
   $('#list').addEventListener('click', (e) => {
     const li = e.target.closest('.item');
     if (!li) return;
@@ -910,9 +941,11 @@
     st.sel = l.findIndex((i) => i.id === li.dataset.id);
     openItem(l[st.sel]);
   });
+
   $('#list').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.target.matches('.item')) e.target.click();
   });
+
   $('#q').oninput = (e) => {
     st.q = e.target.value;
     st.sel = -1;
@@ -921,6 +954,7 @@
     render();
     say(visible().length + ' results');
   };
+
   $$('[data-layout]').forEach(
     (b) =>
       (b.onclick = () => {
@@ -932,12 +966,14 @@
         render();
       }),
   );
+
   $('#markall').onclick = () => {
     visible().forEach((i) => (i.read = true));
     save();
     render();
     say('All items marked as read');
   };
+
   $('#refresh').onclick = () => refreshAll(true);
   $('#theme').onclick = () => {
     const o = ['system', 'light', 'dark'];
@@ -945,6 +981,7 @@
     save();
     render();
   };
+
   $('#menu').onclick = () => $('#nav').classList.toggle('open');
   $('#reader').addEventListener('click', (e) => {
     const id = e.target.id;
@@ -962,6 +999,7 @@
       openItem(it);
     }
   });
+
   document.addEventListener('keydown', (e) => {
     if ($('#app').hidden || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.target.matches('input,select,textarea')) {
@@ -986,6 +1024,7 @@
       $('#q').focus();
     }
   });
+
   setInterval(() => {
     if (
       !$('#app').hidden &&
