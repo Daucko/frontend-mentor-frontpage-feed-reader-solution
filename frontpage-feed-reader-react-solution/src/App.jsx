@@ -5,6 +5,9 @@ import { CAT } from './lib/data';
 import { parseOpml, buildOpml } from './lib/opml';
 import { ItemList, DigestView, DiscoverView, ManageView, Reader } from './Views';
 
+// icons import
+import { Plus } from 'lucide-react'
+
 const TITLES = { digest: 'Digest', all: 'All items', saved: 'Saved', manage: 'Manage feeds', discover: 'Discover' };
 
 export default function App() {
@@ -148,7 +151,7 @@ export default function App() {
           <div className="top-r">
             <div className="search"><input ref={qRef} type="search" placeholder="Search articles..." aria-label="Search items" value={q}
               onChange={e => { setQ(e.target.value); setSelId(null); if (['digest', 'manage'].includes(view)) setView('all'); }} /><kbd aria-hidden="true">/</kbd></div>
-            <button className="sq" aria-label="Add a feed" onClick={() => go('manage')}>+</button>
+            <button className="sq" aria-label="Add a feed" onClick={() => go('manage')}>< Plus size={15} /></button>
             <button className="btn small" aria-label={`Theme: ${theme}. Change theme`} onClick={() => patch(p => ({ ...p, prefs: { ...p.prefs, theme: nextTheme } }))}>{theme[0].toUpperCase() + theme.slice(1)}</button>
           </div>
         </header>
